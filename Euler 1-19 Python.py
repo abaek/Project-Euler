@@ -16,7 +16,7 @@ if __name__ == '__main__':
     main()
 
 #Euler 1
-#Returns the sum of all multiples of 3 or 5, but not both
+#Returns the sum of all multiples of 3 or 5
 
 def prob1():
     sum = 0
