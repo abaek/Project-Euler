@@ -1,20 +1,3 @@
-#-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
-#
-# Author:      Andy
-#
-# Created:     22-12-2013
-# Copyright:   (c) Andy 2013
-# Licence:     <your licence>
-#-------------------------------------------------------------------------------
-
-def main():
-    pass
-
-if __name__ == '__main__':
-    main()
-
 #Euler 1
 #Returns the sum of all multiples of 3 or 5
 
