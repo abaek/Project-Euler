@@ -1,6 +1,12 @@
-#Euler 1
-#Returns the sum of all multiples of 3 or 5
-
+#-------------------------------------------------------------------------------
+# Author:      Andy Baek
+# Created:     20-12-2013
+# Copyright:   (c) Andy Baek 2014
+#-------------------------------------------------------------------------------
+from Useful_Functions import *
+"""
+1. Find the sum of all multiples of 3 or 5, but not both
+"""
 def prob1():
     sum = 0
     for i in range(3, 1000, 3):
@@ -9,20 +15,62 @@ def prob1():
         sum += i
     for i in range(15, 1000, 15):
         sum -= i
-    print sum
+    return sum
+
+"""
+2. Find the sum of the even Fibonacci numbers under four million
+"""
+def prob2():
+    maxTerm = 4000000
+    t1 = 1
+    t2 = 2
+    sumEven = 2
+    while True:
+        temp = t2
+        t2 += t1
+        t1 = temp
+        if t2 > maxTerm:
+            break
+        if t2%2 == 0:
+            sumEven += t2
+    return sumEven
 
 
-#Euler 4
-#Returns the largest palindrome that is a product of two 3-digit integers
+"""
+3. What is the largest prime factor of the number 600851475143 ?
+"""
+def prob3():
+    number= 600851475143
+    curNum = 2
+    while True:
+        maxFactor = (int(number**(1/2.0)))
+        if curNum > maxFactor:
+            break
+        if isPrime(curNum):
+            while True:
+                if number%curNum == 0:
+                    number /= curNum
+                else:
+                    break
+        curNum+=1
+    return number
 
+"""
+4. Find the largest palindrome that is a product of two 3-digit integers
+"""
 def prob4():
     largest = 0
     for num1 in range(999, 99, -1):
+        if num1*999 < largest:
+            break
         for num2 in range(999, 99, -1):
             product = num1*num2
-            if product > largest and palindrome(product):
+            if product <= largest:
+                break
+            if palindrome(product):
+                num1
                 largest = product
-    return largest
+    return largest, iterations
 
 def palindrome(x):
     origStr = str(x)
@@ -32,6 +80,23 @@ def palindrome(x):
     else:
         return False
 
+"""
+5. What is the smallest positive number that is evenly divisible by all of the numbers from 1 to 20?
+"""
+def prob5():
+    maxNum = 20
+    primeFactors = {}
+    factors = findPrimes(maxNum)
+    for factor in factors:
+        primeFactors[factor] = 1
+        count = 2
+        while factor**count <= maxNum:
+            primeFactors[factor] += 1
+            count+=1
+    num = 1
+    for factor in primeFactors.iterkeys():
+        num *= factor**primeFactors[factor]
+    return num
 
 #Euler 8
 #Finds the largest product of 5 consecutive digits in the 1000 digit number

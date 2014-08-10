@@ -1,4 +1,44 @@
-#number of unique powers with base and exponent ranging from 2-100
+#-------------------------------------------------------------------------------
+# Author:      Andy Baek
+# Created:     09-08-2014
+# Copyright:   (c) Andy Baek 2014
+#-------------------------------------------------------------------------------
+
+"""
+26. Find the value of d < 1000 for which 1/d contains the longest recurring cycle in its decimal fraction part.
+    1/7	= 	0.(142857) -> 6-digit recurring cycle
+"""
+#not finished
+from decimal import *
+def prob26():
+    getcontext().prec = 10
+    digitDict = {}
+    maxCycleLength = 0
+    maxNum = 0
+    for i in range(10):
+        digitDict[i] = False
+    for i in range(2, 1000):
+        quotient = Decimal(1) / Decimal(i)
+        decimalDigits = str(quotient).split('.')[1]
+
+        cycleLength = 0
+        for digit in decimalDigits:
+            if digitDict[int(digit)]:
+                break
+            cycleLength+=1
+            digitDict[int(digit)] = True
+        if cycleLength > maxCycleLength:
+            print(i)
+            maxCycleLength=cycleLength
+            maxNum = i
+        for j in range(10):
+            digitDict[j] = False
+    return maxNum
+
+
+"""
+29. Find the number of unique powers with base and exponent ranging from 2-100
+"""
 def prob29():
     setpowers = set()
     for a in range(2, 101):
@@ -6,8 +46,11 @@ def prob29():
             setpowers.add(pow(a, b))
     return len(setpowers)
 
-#Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
-def prob30():
+
+"""
+30. Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
+"""
+def prob30c():
     totalsum = 0
     uniquenums = set()
 
@@ -75,137 +118,26 @@ def prob30():
 
     return totalsum-1
 
-
-#number of ways to get 200 dollars, with given denominations
+"""
+31. Find the number of ways to get 200p dollars, with given coin denominations: 1p, 2p, 5p, 10p, 20p, 50p, 100p and 200p.
+"""
+#dynamic programming: table[i][j] represents number of ways to get
+#j dollars using the first i+1 coins
 def prob31():
-    numways = 0
-    cursum = 0
-    for one in range(0, 201):
-        cursum += 1*one
-        for two in range(0, 101):
-            cursum += 2*two
-            if(cursum > 200):
-                cursum -= 2*two
-                break
-            for five in range(0,41):
-                cursum += 5*five
-                if(cursum > 200):
-                    cursum -= 5*five
-                    break
-                for ten in range(0, 21):
-                    cursum += 10*ten
-                    if(cursum > 200):
-                        cursum -= 10*ten
-                        break
-                    for twenty in range(0, 11):
-                        cursum += 20*twenty
-                        if(cursum > 200):
-                            cursum -= 20*twenty
-                            break
-                        for fifty in range(0, 5):
-                            cursum += 50*fifty
-                            if(cursum > 200):
-                                cursum -= 50*fifty
-                                break
-                            for hundred in range(0, 3):
-                                cursum += 100*hundred
-                                if(cursum > 200):
-                                    cursum -= 100*hundred
-                                    break
-                                for twohundred in range(0, 2):
-                                    cursum += 200*twohundred
-                                    if (cursum == 200):
-                                        numways += 1
-                                    cursum -= 200*twohundred
-                                cursum -= 100*hundred
-                            cursum -= 50*fifty
-                        cursum -= 20*twenty
-                    cursum -= 10*ten
-                cursum -= 5*five
-            cursum -= 2*two
-        cursum-= 1 * one
-    return numways
-
-
-newN = []
-repeat = []
-insert = []
-
-#number of ways to get 200 dollars, with given denominations
-#dynamic programming
-def prob31b():
-    numWays = 0
-    curSum = 0
-
-    #denominations
-    values = [1, 2, 5, 10, 20, 50, 100, 200]
-
-    # {2: [{1: 2}, {2:1}], 5: [{1: 1, 2: 2}, {5: 1}, {1: 3, 2: 1}]}
-    # holds a list of unique unordered sequence of denominations per total sum
-    dictWays = {}
-
-    # {1: 4, 2: 4, 10: 1}
-    # current set of used coins
-    dictSequence = {}
-    for value in values:
-        dictSequence[value] = 0
-
-    prob31help(dictSequence, 0, dictWays, values)
-
-    print("insert: " + str(len(insert)) + ", repeat: " + str(len(repeat)) + ", new: " + str(len(newN)))
-
-    return len(dictWays[200])
-
-
-def prob31help(curSequence, curSum, dictWays, values):
-    if curSum < 60:
-        for curValue in values:
-            newSum = curSum + curValue
-            newSequence = dict(curSequence)
-            newSequence[curValue] += 1
-
-            if newSum in dictWays:
-                #check for duplicates
-                repeated = False
-                for curSet in dictWays[newSum]:
-                    innerRepeat = True
-                    for value in values:
-                        if newSequence[value] != curSet[value]:
-                            innerRepeat = False
-                            break
-                    if innerRepeat:
-                        repeated = True
-                        repeat.append(1)
-                        break
-                if not repeated:
-                    dictWays[newSum].append(newSequence)
-                    prob31help(newSequence, newSum, dictWays, values)
-                    insert.append(1)
+    coins = [1, 2, 5, 10, 20, 50, 100, 200]
+    target = 200
+    table = [0]*len(coins)
+    table[0] = [1]*(target+1)
+    for i in range(1, len(coins)):
+        table[i] = [0]*(target+1)
+    for coinPos in range(1, len(coins)):
+        lastCoin = coins[coinPos]
+        for index in range(target+1):
+            if index < lastCoin:
+                table[coinPos][index] = table[coinPos-1][index]
             else:
-                dictWays[newSum] = [newSequence]
-                newN.append(1)
-                prob31help(newSequence, newSum, dictWays, values)
-
-
-
-#how to get up 100 steps given you can go up 1 or 2 steps each time
-def stepper():
-    stepsdict = {}
-    return stepsfn(0, stepsdict, 100)
-
-def stepsfn(step, stepsdict, numsteps):
-    if step < numsteps:
-        if step in stepsdict:
-            return stepsdict[step]
-        else:
-            stepsdict[step] = stepsfn(step + 1, stepsdict, numsteps) + stepsfn(step + 2, stepsdict, numsteps)
-            return stepsdict[step]
-    elif step == numsteps:
-        return 1
-    elif step > numsteps:
-        return 0
-
-
-
+                table[coinPos][index] = table[coinPos-1][index] + table[coinPos][index-lastCoin]
+    print(table)
+    return table[-1][-1]
 
 
