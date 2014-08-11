@@ -8,73 +8,33 @@ from Useful_Functions import *
 """
 30. Find the sum of all the numbers that can be written as the sum of fifth powers of their digits.
 """
-def prob30c():
-    totalsum = 0
-    uniquenums = set()
-
-    maxperdigit = pow(9, 5)
-    powerdict = {}
-    for i in range(0, 10):
-        powerdict[i] = pow(i, 5)
-
-    maxNumDigits = 1
-    smallestNum = 1
+def prob30():
+    #determine max possible digits
+    maxPossibleDigits = 1
+    maxPerDigit = 9**5
     while(True):
-        if(maxperdigit*maxNumDigits < smallestNum):
-            maxNumDigits -= 1
+        if(maxPerDigit*maxPossibleDigits < 10**(maxPossibleDigits-1)):
+            maxPossibleDigits -= 1
             break
-        smallestNum *= 10
-        maxNumDigits+=1
-
-    bignumdict = {}
-    smallnumdict ={}
-    for i in range(0,10):
-        bignumdict[i] = 0
-        smallnumdict[i] = 0
-
-    for k1,v1 in powerdict.iteritems():
-        smallnumdict[k1] += 1
-        for k2,v2 in powerdict.iteritems():
-            smallnumdict[k2] += 1
-            for k3,v3 in powerdict.iteritems():
-                smallnumdict[k3] += 1
-                for k4,v4 in powerdict.iteritems():
-                    smallnumdict[k4] += 1
-                    for k5,v5 in powerdict.iteritems():
-                        smallnumdict[k5] += 1
-                        for k6,v6 in powerdict.iteritems():
-                            smallnumdict[k6] += 1
-
-                            cursum = v1+v2+v3+v4+v5+v6
-                            for curDigit in range(0, len(str(cursum))):
-                                bignumdict[int(str(cursum)[curDigit])] += 1
-
-                            for k in range(len(str(cursum)),6):
-                                bignumdict[0] += 1
-
-                            numsEqual = True;
-                            for i in range(0,10):
-                                if not smallnumdict[i] == bignumdict[i]:
-                                    numsEqual = False
-                                    break;
-
-                            if (numsEqual == True) and (not cursum in uniquenums):
-                                print cursum
-                                totalsum += cursum
-                                uniquenums.add(cursum)
-
-                            #reset
-                            for i in range(0,10):
-                                bignumdict[i] = 0
-
-                            smallnumdict[k6] -= 1
-                        smallnumdict[k5] -= 1
-                    smallnumdict[k4] -= 1
-                smallnumdict[k3] -= 1
-            smallnumdict[k2] -= 1
-        smallnumdict[k1] -= 1
-
-    return totalsum-1
+        maxPossibleDigits+=1
+    #remove constant calculation
+    fifthPowers = {}
+    for i in range(10):
+        fifthPowers[i] = i**5
+    #iterate through all numbers under 7 digits
+    result = 0
+    for numDigits in range(2, maxPossibleDigits+1):
+        print numDigits
+        for num in range(10**(numDigits-1), (10**numDigits)+1):
+            origNum = num
+            sumPowers = 0
+            for i in range(numDigits):
+                sumPowers += fifthPowers[num%10]
+                num /= 10
+            if sumPowers == origNum:
+                result += origNum
+                print result
+    return result
 
 """
 31. Find the number of ways to get 200p dollars, with given coin denominations: 1p, 2p, 5p, 10p, 20p, 50p, 100p and 200p.
@@ -97,5 +57,52 @@ def prob31():
                 table[coinPos][index] = table[coinPos-1][index] + table[coinPos][index-lastCoin]
     print(table)
     return table[-1][-1]
+
+"""
+32. Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
+    ex: 39 ? 186 = 7254
+    An n-digit number is pandigital if it makes use of all the digits 1 to n exactly once (ex: 15234)
+"""
+def prob32():
+    pandigitals = set()
+    result = 0
+    isPandigital = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
+    #2-digit times 3-digit
+    for num1 in range(10, 100):
+        for num2 in range(100, 1000):
+            product = num1*num2
+            if product > 9999:
+                break
+            numString = str(num1) + str(num2) + str(product)
+            if sorted(numString) == isPandigital:
+                if not (product in pandigitals):
+                    pandigitals.add(product)
+                    result += product
+                    print product, num1, num2
+    #1-digit times 4-digit
+    for num1 in range(1, 10):
+        for num2 in range(1000, 10000):
+            product = num1*num2
+            if product > 9999:
+                break
+            numString = str(num1) + str(num2) + str(product)
+            if sorted(numString) == isPandigital:
+                if not (product in pandigitals):
+                    pandigitals.add(product)
+                    result += product
+                    print product, num1, num2
+    return result
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -11,10 +11,7 @@ from Useful_Functions import *
 """
 def prob10():
     primes = findPrimes(2000000)
-    sum = 0
-    for prime in primes:
-        sum += prime
-    return sum
+    return sum(primes)
 
 """
 11. Returns the largest product of 4 adjacent numbers in a 20x20 grid (vertical, horizontal, diagonal)
@@ -97,17 +94,6 @@ def numFactors(num):
     if num == maxFactor**2:
         numFactors += 1
     return numFactors
-
-def findFactors(num):
-    factors = set()
-    maxFactor = int(num**0.5)
-    for i in range(1, maxFactor+1):
-        if num%i == 0:
-            factors.add(i)
-            factors.add(num/i)
-    factorsList = list(factors)
-    #factorsList.sort()
-    return factorsList
 
 """
 13. Find the first 10 digits of a sum of 100 fifty digit numbers
