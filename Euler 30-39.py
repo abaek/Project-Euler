@@ -166,9 +166,19 @@ def prob34():
 35. How many circular primes are there below one million?
 The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
 """
+def prob35():
+    pass
+
+"""
+36. Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
+"""
+#Bit manipulation
 
 
-
+"""
+37. Find the sum of the only eleven primes (greater than 10) that are both truncatable from left to right and right to left.
+ex: 3797 truncate from left: 3797, 797, 97, and 7. truncate from right: 3797, 379, 37, and 3.
+"""
 
 
 
