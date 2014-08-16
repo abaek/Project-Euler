@@ -60,7 +60,7 @@ def prob31():
 
 """
 32. Find the sum of all products whose multiplicand/multiplier/product identity can be written as a 1 through 9 pandigital.
-    ex: 39 ? 186 = 7254
+    ex: 39 x 186 = 7254
     An n-digit number is pandigital if it makes use of all the digits 1 to n exactly once (ex: 15234)
 """
 def prob32():
@@ -93,6 +93,79 @@ def prob32():
                     print product, num1, num2
     return result
 
+"""
+33. The fraction 49/98 is a curious fraction, as an inexperienced mathematician in attempting to simplify
+    it may incorrectly believe that 49/98 = 4/8, which is correct, is obtained by cancelling the 9s.
+
+    We shall consider fractions like, 30/50 = 3/5, to be trivial examples.
+
+    There are exactly four non-trivial examples of this type of fraction, less than one in value,
+    and containing two digits in the numerator and denominator.
+
+    If the product of these four fractions is given in its lowest common terms, find the value of the denominator.
+"""
+def prob33():
+    numerator = 1
+    denominator = 1
+    nums = 0
+    for commonDigit in range(1, 10):
+        for topDigit in range(1, commonDigit+1):
+            topNum = topDigit*10 + commonDigit
+            if topDigit == commonDigit:
+                for lowDigit in range(topDigit+1, 10):
+                    lowNum = commonDigit*10 + lowDigit
+                    if topNum*1.0/lowNum == topDigit*1.0/lowDigit:
+                        numerator *= topNum
+                        denominator *= lowNum
+                        print topNum, lowNum
+                        nums+=1
+            else:
+                for lowDigit in range(1, 10):
+                    lowNum = commonDigit*10 + lowDigit
+                    if topNum*1.0/lowNum == topDigit*1.0/lowDigit:
+                        numerator *= topNum
+                        denominator *= lowNum
+                        print topNum, lowNum
+                        nums+=1
+    topFactors = findPrimeFactorization(numerator)
+    lowFactors = findPrimeFactorization(denominator)
+    result = 1
+    for key in lowFactors:
+        if key in topFactors:
+            if topFactors[key] < lowFactors[key]:
+                result *= key** (lowFactors[key]-topFactors[key])
+        else:
+            result *= key**lowFactors[key]
+    return result
+
+"""
+34. Find the sum of all numbers which are equal to the sum of the factorial of their digits. (over 1 digit)
+"""
+def prob34():
+    factorials = {0:1}
+    for i in range(1, 10):
+        factorials[i] = factorials[i-1]*i
+    maxPerDigit = factorials[9]
+    maxNumDigits = 1
+    while 10**(maxNumDigits-1) <= maxPerDigit*maxNumDigits:
+        maxNumDigits+=1
+    maxNumDigits-=1
+    result = 0
+    for num in range(10, 10**maxNumDigits):
+        origNum = num
+        digitSum = 0
+        while num != 0:
+            digitSum += factorials[num%10]
+            num /= 10
+        if origNum == digitSum:
+            result += origNum
+            print origNum
+    return result
+
+"""
+35. How many circular primes are there below one million?
+The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
+"""
 
 
 
