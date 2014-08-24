@@ -167,7 +167,10 @@ def prob34():
 The number, 197, is called a circular prime because all rotations of the digits: 197, 971, and 719, are themselves prime.
 """
 def prob35():
-    pass
+    digits = [1, 3, 7, 9]
+    numCircularPrimes = 0
+    for i in range(5):
+
 
 """
 36. Find the sum of all numbers, less than one million, which are palindromic in base 10 and base 2.
